@@ -106,28 +106,25 @@ namespace FormSwap
 
 						a_func(itBaseFormID, swapFormData);
 					}
-					return;
-				}
-
-				if (baseFormIDs.size() > swapFormIDs.size()) {
-					logger::error("\t\t\t\tfail : [{}] (SWAP formID set must be equal or larger than BASE formID set)", a_str);
-					return;
-				}
-
-				auto a_chance = Chance(chance);
-				auto a_rng = BOS_RNG(a_chance);
 
 				// randomly assign each baseFormID to a unique swapFormID
-				for (auto itBaseFormID : baseFormIDs) {
-					const auto setEnd = std::distance(swapFormIDs.begin(), swapFormIDs.end()) - 1;
-					const auto randIt = a_rng.generate<std::int64_t>(0, setEnd);
-					auto swapFormID = swapFormIDs.extract(*std::next(swapFormIDs.begin(), randIt));
-					if (swapFormID) {
-						const Input  input(properties, std::string{}, a_str, a_path);
-						SwapFormData swapFormData(swapFormID.value(), input);
+				} else if (swapFormIDs.size() >= baseFormIDs.size()) {
+					auto a_chance = Chance(chance);
+					auto a_rng = BOS_RNG(a_chance);
 
-						a_func(itBaseFormID, swapFormData);
+					for (auto itBaseFormID : baseFormIDs) {
+						const auto setEnd = std::distance(swapFormIDs.begin(), swapFormIDs.end()) - 1;
+						const auto randIt = a_rng.generate<std::int64_t>(0, setEnd);
+						auto swapFormID = swapFormIDs.extract(*std::next(swapFormIDs.begin(), randIt));
+						if (swapFormID) {
+							const Input  input(properties, std::string{}, a_str, a_path);
+							SwapFormData swapFormData(swapFormID.value(), input);
+
+							a_func(itBaseFormID, swapFormData);
+						}
 					}
+				} else {
+					logger::error("\t\t\t\tfail : [{}] (SWAP formIDSet.size() must be 1 OR equal/greater than BASE formIDSet.size())", a_str);
 				}
 			} else {
 				logger::error("\t\t\t\tfail : [{}] (SWAP formID set not found)", a_str);

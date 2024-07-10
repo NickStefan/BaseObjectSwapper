@@ -71,8 +71,6 @@ namespace util
 			return set;
 		} else if (auto formID = GetFormID(a_str); formID != 0) {
 			set.emplace(formID);
-		} else {
-			logger::error("\t\t\tfailed to process {} (formID not found)", a_str);
 		}
 		return set;
 	}
