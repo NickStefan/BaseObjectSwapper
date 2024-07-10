@@ -94,13 +94,26 @@ namespace FormSwap
 			}
 		} else if (const auto baseFormIDs = util::GetFormIDOrderedSet(formPair[0]); !baseFormIDs.empty()) {
 			if (auto swapFormIDs = util::GetFormIDOrderedSet(formPair[1]); !swapFormIDs.empty()) {
+				auto properties = formPair.size() > 2 ? formPair[2] : std::string{};
+				auto chance = formPair.size() > 3 ? formPair[3] : std::string{};
+
+				// assign each baseFormID the same swapFormID
+				if (swapFormIDs.size() == 1) {
+					auto swapFormID = *(swapFormIDs.begin()).value();
+					for (auto itBaseFormID : baseFormIDs) {
+						const Input  input(properties, chance, a_str, a_path);
+						SwapFormData swapFormData(swapFormID, input);
+
+						a_func(itBaseFormID, swapFormData);
+					}
+					return;
+				}
+
 				if (baseFormIDs.size() > swapFormIDs.size()) {
 					logger::error("\t\t\t\tfail : [{}] (SWAP formID set must be equal or larger than BASE formID set)", a_str);
 					return;
 				}
-				auto properties = formPair.size() > 2 ? formPair[2] : std::string{};
-				auto chance = formPair.size() > 3 ? formPair[3] : std::string{};
-
+				
 				auto a_chance = Chance(chance);
 				auto a_rng = BOS_RNG(a_chance);
 

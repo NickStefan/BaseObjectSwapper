@@ -2,8 +2,10 @@ name: Main
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branch:
+      - 'multi-swap-2'
+    # tags:
+    #   - 'v[0-9]+.[0-9]+.[0-9]+'
 
 concurrency:
   group: ${{ github.ref }}
@@ -11,7 +13,7 @@ concurrency:
 
 jobs:
   run:
-    if: github.repository_owner == 'powerof3'
+    # if: github.repository_owner == 'powerof3'
     uses: adya/pack-skse-mod/.github/workflows/pack.yml@main
     with:
       AE_353_BRANCH: master
