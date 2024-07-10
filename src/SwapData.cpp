@@ -99,7 +99,7 @@ namespace FormSwap
 
 				// assign each baseFormID the same swapFormID
 				if (swapFormIDs.size() == 1) {
-					auto swapFormID = *(swapFormIDs.begin()).value();
+					auto swapFormID = *(swapFormIDs.begin());
 					for (auto itBaseFormID : baseFormIDs) {
 						const Input  input(properties, chance, a_str, a_path);
 						SwapFormData swapFormData(swapFormID, input);
@@ -113,7 +113,7 @@ namespace FormSwap
 					logger::error("\t\t\t\tfail : [{}] (SWAP formID set must be equal or larger than BASE formID set)", a_str);
 					return;
 				}
-				
+
 				auto a_chance = Chance(chance);
 				auto a_rng = BOS_RNG(a_chance);
 
